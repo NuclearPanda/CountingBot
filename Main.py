@@ -29,7 +29,7 @@ async def on_ready():
 @client.event
 async def on_message(message):
     if str(message.channel) == 'counting':
-        if message.content.startswith(str(lastMessage + 1)):
+        if message.content == (str(lastMessage + 1)):
             counter()
             return
         else:
