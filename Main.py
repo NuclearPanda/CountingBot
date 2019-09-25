@@ -2,8 +2,12 @@ from discord.utils import get
 from discord import Game
 from discord.ext.commands import Bot
 
-with open("token.txt") as f:  # read token from file so I don't have to put the token up publicly
-    token = f.read().rstrip()
+try:
+    with open("token.txt") as f:  # read token from file so I don't have to put the token up publicly
+        token = f.read().rstrip()
+except FileNotFoundError:
+    print("Please add the token to the file token.txt in this directory")
+    exit()
 
 client = Bot('notneeded')  # 'notneeded' is the bot command prefix, as this bot has no commands the prefix is not needed
 # and that is reflected in the name
