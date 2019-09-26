@@ -26,15 +26,24 @@ def reset():  # reset the counter
     lastMessage = 0
 
 
-async def get_last_message():  # returns the last message if it was numerical, 0 otherwise
+def check_message(message):  # returns true if the message is correct for the current chain, false otherwise
+    global lastMessage
+    if message.isnumeric():
+        if int(message) == lastMessage + 1:
+            return True
+    else:
+        return False
+
+
+async def get_last_message():  # returns the last message if it is a number, 0 otherwise
     for server in client.guilds:
         if server.name == "Bot testing":
             for channel in server.channels:
                 if channel.name == "counting":
                     async for message in channel.history(limit=1):
-                        try:
+                        if message.isnumeric():
                             last = int(message.content)
-                        except ValueError:
+                        else:
                             member = message.author  # get the user who sent the message
                             role = get(member.guild.roles,
                                        name="Failed")  # get the id of the role with the name "Failed"
@@ -56,7 +65,7 @@ async def on_ready():  # set the "playing:" message and print when the bot is lo
 @client.event
 async def on_message(message):
     if str(message.channel) == 'counting':  # check the message is in the right channel
-        if message.content == (str(lastMessage + 1)):  # check the message is correct
+        if check_message(message.content):  # check the message is correct
             increment()  # increment the counter
         else:
             print("reset", message.content)  # print the message that reset the counter
